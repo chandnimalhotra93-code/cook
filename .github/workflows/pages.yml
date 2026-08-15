@@ -5,7 +5,6 @@ on:
     branches: [main]
   workflow_dispatch:
 
-# GitHub's Node.js 24 migration: run JavaScript actions on Node 24.
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
@@ -30,6 +29,14 @@ jobs:
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
+
+      - name: Rebuild original banner image
+        shell: bash
+        run: |
+          cat assets/banner.part0 assets/banner.part1 assets/banner.part2 > /tmp/banner.b64
+          base64 --decode /tmp/banner.b64 > assets/banner.jpg
+          file assets/banner.jpg
+          rm -f assets/banner.part0 assets/banner.part1 assets/banner.part2
 
       - name: Upload site
         uses: actions/upload-pages-artifact@v4
